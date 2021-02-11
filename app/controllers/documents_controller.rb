@@ -1,7 +1,6 @@
 class DocumentsController < ApplicationController
   def index
     @documents = Document.all
-    render text: "yeehaw"
   end
 
   def show
@@ -44,4 +43,3 @@ class DocumentsController < ApplicationController
       params.require(:document).permit(:title, :content)
     end
 end
-

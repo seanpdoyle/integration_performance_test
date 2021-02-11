@@ -1,55 +1,73 @@
 require 'test_helper'
 require 'benchmark/ips'
 
-class DocumentsControllerTest < ActionController::TestCase
+class RailsDomTestingDocumentsIntegrationTest < ActionDispatch::IntegrationTest
+  assert_with :rails_dom_testing
+
   test "index" do
-    get :index
-    assert_equal 200, response.status
-  end
+    document = Document.create!(title: "title", content: "content")
 
-  test "create" do
-    post :create, params: { document: { title: "New things", content: "Doing them" } }
-
-    document = Document.last
-    assert_equal 'New things', document.title
-    assert_equal 'Doing them', document.content
-  end
-end
-
-class DocumentsIntegrationTest < ActionDispatch::IntegrationTest
-  test "index" do
     get '/documents'
     assert_equal 200, response.status
+
+    assert_select "h1", text: document.title
+    assert_select "p", text: document.content
   end
 
   test "create" do
     post '/documents', params: { document: { title: "New things", content: "Doing them" } }
+    follow_redirect!
 
     document = Document.last
-    assert_equal 'New things', document.title
-    assert_equal 'Doing them', document.content
+
+    assert_select "h1", text: document.title
+    assert_select "p", text: document.content
+  end
+end
+
+class CapybaraMinitestDocumentsIntegrationTest < ActionDispatch::IntegrationTest
+  assert_with :capybara
+
+  test "index" do
+    document = Document.create!(title: "title", content: "content")
+
+    get '/documents'
+    assert_equal 200, response.status
+
+    assert_selector "h1", text: document.title
+    assert_selector "p", text: document.content
+  end
+
+  test "create" do
+    post '/documents', params: { document: { title: "New things", content: "Doing them" } }
+    follow_redirect!
+
+    document = Document.last
+
+    assert_selector "h1", text: document.title
+    assert_selector "p", text: document.content
   end
 end
 
 Benchmark.ips(5) do |bm|
-  bm.report 'INDEX: Integration Test' do
-    Minitest.run_one_method(DocumentsIntegrationTest, 'test_index')
+  bm.report 'INDEX: rails-dom-testing' do
+    Minitest.run_one_method(RailsDomTestingDocumentsIntegrationTest, 'test_index')
   end
 
-  bm.report 'INDEX: Functional Test' do
-    Minitest.run_one_method(DocumentsControllerTest, 'test_index')
+  bm.report 'INDEX: capybara/minitest' do
+    Minitest.run_one_method(CapybaraMinitestDocumentsIntegrationTest, 'test_index')
   end
 
   bm.compare!
 end
 
 Benchmark.ips(5) do |bm|
-  bm.report 'CREATE: Integration Test' do
-    Minitest.run_one_method(DocumentsIntegrationTest, 'test_create')
+  bm.report 'CREATE: rails-dom-testing' do
+    Minitest.run_one_method(RailsDomTestingDocumentsIntegrationTest, 'test_create')
   end
 
-  bm.report 'CREATE: Functional Test' do
-    Minitest.run_one_method(DocumentsControllerTest, 'test_create')
+  bm.report 'CREATE: capybara/minitest' do
+    Minitest.run_one_method(CapybaraMinitestDocumentsIntegrationTest, 'test_create')
   end
 
   bm.compare!
