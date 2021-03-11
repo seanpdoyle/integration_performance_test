@@ -1,0 +1,13 @@
+<%= form_with model: @document do |form| %>
+  <%= field_set_tag "Document" do %>
+    <%= form.label :title %>
+    <%= form.text_field :title %>
+
+    <%= form.label :content %>
+    <%= form.text_area :content %>
+
+    <%= form.select :status, [["Published", "published"], ["Draft", "draft"]] %>
+
+    <%= form.button %>
+  <% end %>
+<% end %>
