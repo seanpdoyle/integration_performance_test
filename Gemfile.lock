@@ -6,9 +6,16 @@ GIT
       activerecord (>= 6.a)
 
 GIT
-  remote: https://github.com/rails/rails.git
-  revision: 168ddaa08a63cd956bb7c3ba10be1a7ae36d4ee2
-  branch: main
+  remote: https://github.com/rails/turbolinks.git
+  revision: 80216ce9d89920bf073709405e3fce6d0a3ccd9a
+  specs:
+    turbolinks (3.0.0)
+      coffee-rails
+
+GIT
+  remote: https://github.com/seanpdoyle/rails.git
+  revision: 90aeb0fcf9d4ec21b0aca83a45d2fce360bdabd2
+  branch: action-view-nokogiri
   specs:
     actioncable (7.0.0.alpha)
       actionpack (= 7.0.0.alpha)
@@ -46,6 +53,7 @@ GIT
       activesupport (= 7.0.0.alpha)
       builder (~> 3.1)
       erubi (~> 1.4)
+      nokogiri (>= 1.8.5)
       rails-dom-testing (~> 2.0)
       rails-html-sanitizer (~> 1.1, >= 1.2.0)
     activejob (7.0.0.alpha)
@@ -90,13 +98,6 @@ GIT
       method_source
       rake (>= 0.8.7)
       thor (~> 1.0)
-
-GIT
-  remote: https://github.com/rails/turbolinks.git
-  revision: 80216ce9d89920bf073709405e3fce6d0a3ccd9a
-  specs:
-    turbolinks (3.0.0)
-      coffee-rails
 
 GEM
   remote: https://rubygems.org/
@@ -162,7 +163,7 @@ GEM
     mocha (1.1.0)
       metaclass (~> 0.0.1)
     nio4r (2.5.7)
-    nokogiri (1.11.1)
+    nokogiri (1.11.2)
       mini_portile2 (~> 2.5.0)
       racc (~> 1.4)
     racc (1.5.2)
